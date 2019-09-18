@@ -3,8 +3,11 @@
 $checkout = new CheckoutApi('your secret key');
 $threeDsSessionId = 'sid_y3oqhf46pyzuxjbcn2giaqnb44';
 
-$details = $checkout->payments()->details($threeDsSessionId);
+try {
 
-if ($details->isSuccessful()) {
-    return $details->getSourceId();
+	$details = $checkout->payments()->details($threeDsSessionId);
+	return $details->getSourceId();
+
+} catch(CheckoutHttpException $ex) {
+	return $ex->getErrors();
 }

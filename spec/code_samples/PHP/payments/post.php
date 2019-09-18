@@ -21,7 +21,7 @@ try {
     return $details;
 
 } catch (CheckoutModelException $ex) {
-    return $ex->getBody();
+    return $ex->getErrors();
 } catch (CheckoutHttpException $ex) {
-    return $ex->getBody();
+    return $ex->getErrors();
 }
