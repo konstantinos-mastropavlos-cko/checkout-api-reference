@@ -1,5 +1,5 @@
 type: object
-description: The destination of the payment
+description: The destination of the payout.<br><i>Use to pay out to a card</i>.
 discriminator:
   propertyName: type
   mapping:
@@ -11,5 +11,5 @@ required:
 properties:
   type:
     type: string
-    description: The payment destination type
-    example: "card"
+    description: The payout destination type
+    example: "token"
