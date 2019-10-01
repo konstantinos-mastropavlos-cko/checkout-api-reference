@@ -581,12 +581,11 @@ paths:
     post:
       tags:
         - Reporting
-      summary: Download a JSON report of your payments
+      summary: Retrieve JSON payments report
       description: |
-        Search for all payments within parameters you specify.
-        You can reconcile the data from this report against statements (which can be found in the Hub), the list of payments in the Hub (using the `Reference` field) or your own systems.
-    
-        No payments from before February 7th, 2019 at 00.00.00 UTC will appear when using the payments endpoint. To view payments from before this time, please contact our support team.
+        Retrieves a payment report containing all payments within your specified parameters.
+        You can reconcile the data from this report against your statements (which can be found in the Hub), the list of payments in the Hub (using the `Reference` field) or your own systems.
+        *Note:* payments from before February 7th, 2019 at 00.00.00 UTC will appear when using the payments endpoint. To view payments from before this time, please contact our support team.
     
       parameters:
         - in: query
@@ -607,10 +606,18 @@ paths:
             type: string
           required: false
           description: Reference of the payment to search for
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          required: false
+          description: Number of results to limit your search to
+          maximum: 500
+          default: 200
     
       responses:
         '201':
-          description: Payment report returned successfully
+          description: Payment report retrieved successfully
           content:
             application/json:
               schema:
@@ -636,44 +643,20 @@ paths:
     post:
       tags:
         - Reporting
-      summary: Download a JSON report of your payments
+      summary: Retrieve JSON single payment report
       description: |
-        Search for all payments within parameters you specify.
-        You can reconcile the data from this report against statements (which can be found in the Hub), the list of payments in the Hub (using the `Reference` field) or your own systems.
-    
-        No payments from before February 7th, 2019 at 00.00.00 UTC will appear when using the payments endpoint. To view payments from before this time, please contact our support team.
+        Retrieves a payment report containing all of the data related to a specific payment, based on the payment's identifier.
+        
+        *Note:* No payments from before February 7th, 2019 at 00.00.00 UTC will appear when using the payments endpoint. To view payments from before this time, please contact our support team.
     
       parameters:
-        - in: query
-          name: from
-          schema:
-            type: string
-          required: false
-          description: X
-        - in: query
-          name: to
-          schema:
-            type: string
-          required: false
-          description: X
-        - in: query
+        - in: path
           name: paymentId
+          pattern: "^(pay)_(\w{26})$"
           schema:
             type: string
-          required: false
-          description: X
-        - in: query
-          name: actionId
-          schema:
-            type: string
-          required: false
-          description: X
-        - in: query
-          name: reference
-          schema:
-            type: string
-          required: false
-          description: X
+          required: true
+          description: The payment identifier
     
       responses:
         '201':
@@ -687,10 +670,6 @@ paths:
               $ref: "#/components/headers/Cko-Request-Id"
             Cko-Version:
               $ref: "#/components/headers/Cko-Version"
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ValidationError'
         '422':
           description: Invalid data was sent
           content:
@@ -703,35 +682,35 @@ paths:
     post:
       tags:
         - Reporting
-      summary: Download a CSV report of your payments
+      summary: Retrieve CSV payments report
       description: 
-        TODO
-    
+        In addition to the JSON format returned by the `reporting/payments` endpoint, you can also download a CSV report containing the same data.
+        For more information on how to read your CSV report, <a href="https://docs.checkout.com/docs/payments-endpoint#section-how-to-read-the-csv-file" target="_blank">click here</a>.
       parameters:
         - in: query
           name: from
           schema:
             type: string
           required: false
-          description: TODO
+          description: Date from which to search for payments
         - in: query
           name: to
           schema:
             type: string
           required: false
-          description: TODO
+          description: Date until which to search for payments
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PaymentRequest'
+              $ref: 'TODO'
       responses:
         '201':
-          description: Payment processed successfully
+          description: TODO
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaymentResponse'
+                $ref: 'TODO'
           headers:
             Cko-Request-Id:
               $ref: "#/components/headers/Cko-Request-Id"
@@ -741,57 +720,24 @@ paths:
     post:
       tags:
         - Reporting
-      summary: Download a JSON report of your statements
-      description: |
-        Checkout.com supports payments from a variety of sources, from cards to
-        SEPA direct debits. The source of payment must be specified using the `source.type` field along with any source specific data.
-    
-        To verify the success of the payment, check the `approved` field in the response.
+      summary: Retrieve JSON statements report
+      description: TODO
     
       parameters:
-        - in: header
-          name: Cko-Idempotency-Key
-          schema:
-            type: string
-          required: false
-          description: Optional idempotency key for safely retrying payment requests
+        TODO
     
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PaymentRequest'
       responses:
         '201':
-          description: Payment processed successfully
+          description: TODO
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaymentResponse'
+                $ref: 'TODO'
           headers:
             Cko-Request-Id:
               $ref: "#/components/headers/Cko-Request-Id"
             Cko-Version:
               $ref: "#/components/headers/Cko-Version"
-        '202':
-          description: Payment asynchronous or further action required
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PaymentAcceptedResponse'
-          headers:
-            Cko-Request-Id:
-              $ref: "#/components/headers/Cko-Request-Id"
-            Cko-Version:
-              $ref: "#/components/headers/Cko-Version"
-        '401':
-          description: Unauthorized
-        '429':
-          description: Too many requests or duplicate request detected
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ValidationError'
         '422':
           description: Invalid data was sent
           content:
@@ -804,29 +750,20 @@ paths:
     post:
       tags:
         - Reporting
-      summary: Download a CSV report of your statements
-      description: |
-        Checkout.com supports payments from a variety of sources, from cards to
-        SEPA direct debits. The source of payment must be specified using the `source.type` field along with any source specific data.
-    
-        To verify the success of the payment, check the `approved` field in the response.
+      summary: Retrieve CSV statements report
+      description: TODO
     
       parameters:
-        - in: header
-          name: Cko-Idempotency-Key
-          schema:
-            type: string
-          required: false
-          description: Optional idempotency key for safely retrying payment requests
+        TODO
     
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PaymentRequest'
+              $ref: 'TODO'
       responses:
         '201':
-          description: Payment processed successfully
+          description: TODO
           content:
             application/json:
               schema:
@@ -836,25 +773,6 @@ paths:
               $ref: "#/components/headers/Cko-Request-Id"
             Cko-Version:
               $ref: "#/components/headers/Cko-Version"
-        '202':
-          description: Payment asynchronous or further action required
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PaymentAcceptedResponse'
-          headers:
-            Cko-Request-Id:
-              $ref: "#/components/headers/Cko-Request-Id"
-            Cko-Version:
-              $ref: "#/components/headers/Cko-Version"
-        '401':
-          description: Unauthorized
-        '429':
-          description: Too many requests or duplicate request detected
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ValidationError'
         '422':
           description: Invalid data was sent
           content:
@@ -867,57 +785,29 @@ paths:
     post:
       tags:
         - Reporting
-      summary: Download a CSV report of your statements
-      description: |
-        Checkout.com supports payments from a variety of sources, from cards to
-        SEPA direct debits. The source of payment must be specified using the `source.type` field along with any source specific data.
-    
-        To verify the success of the payment, check the `approved` field in the response.
+      summary: Retrieve CSV statements report
+      description: TODO
     
       parameters:
-        - in: header
-          name: Cko-Idempotency-Key
-          schema:
-            type: string
-          required: false
-          description: Optional idempotency key for safely retrying payment requests
+        TODO
     
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PaymentRequest'
+              $ref: 'TODO'
       responses:
         '201':
-          description: Payment processed successfully
+          description: TODO
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaymentResponse'
+                $ref: 'TODO'
           headers:
             Cko-Request-Id:
               $ref: "#/components/headers/Cko-Request-Id"
             Cko-Version:
               $ref: "#/components/headers/Cko-Version"
-        '202':
-          description: Payment asynchronous or further action required
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PaymentAcceptedResponse'
-          headers:
-            Cko-Request-Id:
-              $ref: "#/components/headers/Cko-Request-Id"
-            Cko-Version:
-              $ref: "#/components/headers/Cko-Version"
-        '401':
-          description: Unauthorized
-        '429':
-          description: Too many requests or duplicate request detected
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ValidationError'
         '422':
           description: Invalid data was sent
           content:
@@ -3893,6 +3783,270 @@ components:
           minLength: 6
           maxLength: 25
           example: 415 555 2671
+    PaymentsReportResponse:
+      type: object
+      description: Payments Report Response
+      required:
+        - count
+        - data
+      properties:
+        count:
+          type: integer
+          description: TODO
+          example: 1
+        data:
+          type: object
+          description: TODO
+          properties:
+            id:
+              type: string
+              description: The unique payment identifier
+              example: "pay_nezg6bx2k22utmk4xm5s2ughxi"
+            processing_currency:
+              type: string
+              description: The currency of the payment when processed by the cardholder
+              example: "USD"
+            payout_currency:
+              type: string
+              description: The currency of the payment when paid out to you
+              example: "GBP"
+            requested_on:
+              type: TODO
+              description: The date on which the payment was initiated
+              example: "2019-03-08T10:29:51.922"
+            channel_name:
+              type: string
+              description: The name of the channel where the payment was initiated
+              example: TODO
+            reference:
+              type: string
+              description: An optional identifier used for tracking payments
+              example: "ORD-5023-4E89"
+            payment_method:
+              type: string
+              description: The payment method
+              example: "VISA"
+            card_type:
+              type: string
+              description: The card type
+              example: "CREDIT"
+            card_category:
+              type: string
+              description: The card category
+              example: "Consumer"
+            issuer_country:
+              type: string
+              description: The country of the issuing bank
+              example: "US"
+            merchant_country:
+              type: string
+              description: The country of the merchant bank
+              example: "SI"
+            mid:
+              type: string
+              description: An optional, user-defined identifier for the business
+              example: "123456"
+            actions:
+              type: object
+              description: TODO
+              properties:
+                type:
+                  type: string
+                  description: The type of action administered to a payment
+                  example: "Authorization"
+                id:
+                  type: string
+                  description: The unique identifier associated with an action (referred to as a charge ID in the Hub).
+                  example: "act_nezg6bx2k22utmk4xm5s2ughxi"
+                processed_on:
+                  type: TODO
+                  description: The date on which the action occurred
+                  example: "2019-03-08T10:29:51.922"
+                response_code:
+                  type: TODO
+                  description: The response code of the action (payment request)
+                  example: "10000"
+                response_description:
+                  type: string
+                  description: Further information about the response code
+                  example: "Approved"
+                breakdown:
+                  type: object
+                  description: TODO
+                  properties:
+                    type:
+                      type: string
+                      description: Describes an amount/fee associated with an action. For example, a gateway fee, capture fee and capture amount would all be associated with the capture action
+                      example: "Gateway Fee Tax ARE USD/GBP@0.7640412612"
+                    date:
+                      type: TODO
+                      description: Specifies an associated date with a specific amount (some external fees are returned after the associated action)
+                      example: "2019-03-08T10:29:51.922"
+                    processing_currency_amount:
+                      type: TODO
+                      description: The associated amount in the processing currency (if applicable). Numerical values up to 8 decimal places are provided in the response
+                      example: "-0.003"
+                    payout_currency_amount:
+                      type: TODO
+                      description: The associated amount in the payout currency. Numerical values up to 8 decimal places are provided in the response
+                      example: "-0.00229212"
+            _links:
+              type: object
+                  description: TODO
+                  properties:
+                    payments:
+                      type: object
+                      description: TODO
+                      properties:
+                        href:
+                          type: string
+                          description: TODO
+                          example: "http://api.checkout.com/reporting/statements/190110B107654/payments"
+        _links:
+          type: object
+          description: TODO
+          properties:
+            next:
+              type: object
+              description: This link allows you to move to the next page of results in the response. Responses are paginated at the payout level
+              properties:
+                href:
+                  type: string
+                  description: TODO
+                  example: "http://api.checkout.com/reporting/payments?from=01%2F03%2F2019%2000%3A00%3A00&to=01%2F03%2F2019%2000%3A00%3A00&limit=1&after=11111111"
+            self:
+              type: object
+              description: TODO
+              properties:
+                href:
+                  type: string
+                  description: This is a direct link to the response associated with the submitted request
+                  example: "http://api.checkout.com/reporting/payments?from=01%2F03%2F2019%2000%3A00%3A00&to=01%2F03%2F2019%2000%3A00%3A00&limit=1"
+    StatementsReportResponse:
+      type: object
+      description: Statements Report Response
+      required:
+        - count
+        - data
+        - id
+        - period_start
+        - period_end
+        - date
+        - payouts
+        - _links
+      properties:
+        count:
+          type: integer
+          description: TODO
+          example: 1
+        data:
+          type: object
+          description: The unique identifier for the action performed against this payment
+          example: 1
+          properties:
+            id:
+              type: string
+              description: The ID of the generated statement
+              example: "190110B107654"
+            period_start:
+              type: TODO
+              description: The start date of all transactions and amounts that are encompassed within the statement
+              example: "2019-01-09T00:00:00.000"
+            period_end:
+              type: TODO
+              description: The end date of all transactions and amounts that are encompassed within the statement
+              example: "2019-01-09T23:59:59.000"
+            date:
+              type: TODO
+              description: The date the statement was generated
+            payouts:
+              type: object
+              description: The summary is a breakdown of your statement, ordered by the payout currency and its associated payout ID
+              properties:
+                currency:
+                  type: TODO
+                  description: The currency of the payout
+                  example: "GBP"
+                carried_forward_amount:
+                  type: TODO
+                  description: The amount carried forward before the statement period
+                  example: 0
+                current_period_amount:
+                  type: TODO
+                  description: The total amount of transactions during the statement period
+                  example: 15005.24
+                net_amount:
+                  type: TODO
+                  description: The total amount paid out to your bank account
+                  example: 15005.24
+                date:
+                  type: TODO
+                  description: The date the payout was completed
+                  example: "2019-01-10T00:00:00.000"
+                period_start:
+                  type: TODO
+                  description: TODO
+                  example: "2019-01-09T00:00:00.000"
+                period_end:
+                  type: TODO
+                  description: TODO
+                  example: "2019-01-09T23:59:59.000"
+                id:
+                  type: TODO
+                  description: Identifies the associated payment
+                  example: "ABCDEFGH"
+                status:
+                  type: TODO
+                  description: The status of the payout
+                  example: "Remitted"
+                payout _fee:
+                  type: TODO
+                  description: The total fee charged for the payout
+                  example: "-5"
+                _links:
+                  type: object
+                  description: TODO
+                  properties:
+                    payments:
+                      type: object
+                      description: TODO
+                      properties:
+                        href:
+                          type: string
+                          description: TODO
+                          example: "http://api.checkout.com/reporting/statements/190110B107654/payments?payout_id=ABCDEFGH"
+            _links:
+              type: object
+                  description: TODO
+                  properties:
+                    payments:
+                      type: object
+                      description: TODO
+                      properties:
+                        href:
+                          type: string
+                          description: TODO
+                          example: "http://api.checkout.com/reporting/statements/190110B107654/payments"
+        _links:
+          type: object
+          description: TODO
+          properties:
+            next:
+              type: object
+              description: This link allows you to move to the next page of results in the response. Responses are paginated at the payout level
+              properties:
+                href:
+                  type: string
+                  description: TODO
+                  example: "http://api.checkout.com/reporting/statements?from=01%2F01%2F2019%2000%3A00%3A00&to=01%2F11%2F2019%2000%3A00%3A00&limit=1&skip=1"
+            self:
+              type: object
+              description: TODO
+              properties:
+                href:
+                  type: string
+                  description: This is a direct link to the response associated with the submitted request
+                  example: "http://api.checkout.com/reporting/statements?from=01%2F01%2F2019%2000%3A00%3A00&to=01%2F11%2F2019%2000%3A00%3A00&limit=1"
     ResourceId:
       type: string
       description: The resource ID. Defaults to UUID v4
