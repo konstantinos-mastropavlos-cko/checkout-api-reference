@@ -3,7 +3,7 @@
 $checkout = new CheckoutApi('your secret key');
 $paymentID = 'pay_y3oqhf46pyzuxjbcn2giaqnb44';
 
-// Full Capture
+// Full capture
 $capture = new Capture($paymentID);
 
 // Or partial capture
