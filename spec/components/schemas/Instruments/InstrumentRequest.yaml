@@ -1,38 +1,15 @@
 type: object
+required:
+  - type
+  - token
 properties:
-    id:
-        type: string
-        example: 'src_wmlfc3zyhqzehihu7giusaaawu'
-    expiry_month:
-        type: number
-        example: 6
-    expiry_year:
-        type: number
-        example: 2025
-    scheme:
-        type: string
-        example: 'VISA'
-    last4:
-        type: string
-        example: '9996'
-    bin:
-        type: string
-        example: '454347'
-    card_type:
-        type: string
-        example: 'Credit'
-    card_category:
-        type: string
-        example: 'Consumer'
-    issuer:
-        type: string
-        example: 'GOTHAM STATE BANK'
-    issuer_country:
-        type: string
-        example: 'US'
-    product_id:
-        type: string
-        example: 'F'
-    product_type:
-        type: string
-        example: 'CLASSIC'
+  type:
+    type: string
+    description: The instrument type
+    pattern: token
+    example: token
+  token:
+    type: string
+    description: The card token retrieved either from UPAPI or Classic API
+    pattern: ^tok_[a-zA-Z0-9]{26}$ | ^card_tok_{guid}{12}$
+    example: tok_asoto22g2fsu7prwomy12sgfsa
