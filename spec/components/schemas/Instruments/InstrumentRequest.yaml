@@ -1,0 +1,38 @@
+type: object
+properties:
+    id:
+        type: string
+        example: 'src_wmlfc3zyhqzehihu7giusaaawu'
+    expiry_month:
+        type: number
+        example: 6
+    expiry_year:
+        type: number
+        example: 2025
+    scheme:
+        type: string
+        example: 'VISA'
+    last4:
+        type: string
+        example: '9996'
+    bin:
+        type: string
+        example: '454347'
+    card_type:
+        type: string
+        example: 'Credit'
+    card_category:
+        type: string
+        example: 'Consumer'
+    issuer:
+        type: string
+        example: 'GOTHAM STATE BANK'
+    issuer_country:
+        type: string
+        example: 'US'
+    product_id:
+        type: string
+        example: 'F'
+    product_type:
+        type: string
+        example: 'CLASSIC'
