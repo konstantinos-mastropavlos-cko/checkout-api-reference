@@ -1,38 +1,72 @@
 type: object
+required:
+  - id
+  - expiry_month
+  - expiry_year
+  - last4
+  - bin
 properties:
     id:
+        description: The unique identifier of the payment source that can be used later for payments
         type: string
         example: 'src_wmlfc3zyhqzehihu7giusaaawu'
     expiry_month:
-        type: number
+        type: integer
+        description: The two-digit expiry month
+        minimum: 1
         example: 6
+        maxLength: 2
     expiry_year:
-        type: number
+        type: integer
+        description: The four-digit expiry year
         example: 2025
+        minLength: 4
+        maxLength: 4
     scheme:
         type: string
-        example: 'VISA'
+        description: The card scheme
+        example: "VISA"
     last4:
         type: string
-        example: '9996'
+        description: The last four digits of the card number
+        example: "9996"
+        minLength: 4
+        maxLength: 4
     bin:
         type: string
-        example: '454347'
+        description: The card issuer's BIN
+        example: "454347"
+        maxLength: 4
     card_type:
         type: string
-        example: 'Credit'
+        description: The card type
+        enum:
+        - Credit
+        - Debit
+        - Prepaid
+        example: Credit
     card_category:
         type: string
-        example: 'Consumer'
+        description: The card category
+        enum:
+        - Consumer
+        - Commercial
+        example: Consumer
     issuer:
         type: string
-        example: 'GOTHAM STATE BANK'
+        description: The name of the card issuer
+        example: "GOTHAM STATE BANK"
     issuer_country:
         type: string
-        example: 'US'
+        maxLength: 2
+        minLength: 2
+        description: The card issuer country ISO-2 code
+        example: "US"
     product_id:
         type: string
-        example: 'F'
+        description: The issuer/card scheme product identifier
+        example: "F"
     product_type:
         type: string
-        example: 'CLASSIC'
+        description: The issuer/card scheme product type
+        example: CLASSIC

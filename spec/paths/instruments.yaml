@@ -3,7 +3,7 @@ post:
     - Instruments
   summary: Create Instrument
   description: |
-    Create instrument using a valid UPAPI or Classic token
+    Create instrument using a Checkout.com token
   requestBody:
     required: true
     content:

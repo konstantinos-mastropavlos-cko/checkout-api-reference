@@ -10,6 +10,6 @@ properties:
     example: token
   token:
     type: string
-    description: The card token retrieved either from UPAPI or Classic API
-    pattern: ^tok_[a-zA-Z0-9]{26}$ | ^card_tok_{guid}{12}$
+    description: The Checkout.com token
+    pattern: ^(tok)_(\w{26})$ | ^(card_tok)_(\w{12})$
     example: tok_asoto22g2fsu7prwomy12sgfsa
