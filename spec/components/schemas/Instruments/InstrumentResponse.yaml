@@ -7,18 +7,18 @@ required:
   - bin
 properties:
     id:
-        description: The unique identifier of the payment source that can be used later for payments
+        description: The unique identifier of the payment source or destination that can be used later for payments
         type: string
         example: 'src_wmlfc3zyhqzehihu7giusaaawu'
     expiry_month:
         type: integer
-        description: The two-digit expiry month
+        description: The expiry month
         minimum: 1
         example: 6
         maxLength: 2
     expiry_year:
         type: integer
-        description: The four-digit expiry year
+        description: The expiry year
         example: 2025
         minLength: 4
         maxLength: 4
@@ -34,9 +34,8 @@ properties:
         maxLength: 4
     bin:
         type: string
-        description: The card issuer's BIN
+        description: The card issuer's bank identification number (BIN)
         example: "454347"
-        maxLength: 4
     card_type:
         type: string
         description: The card type
@@ -60,7 +59,7 @@ properties:
         type: string
         maxLength: 2
         minLength: 2
-        description: The card issuer country ISO-2 code
+        description: The card issuer's country (<a href="https://docs.checkout.com/docs/country-codes" target="blank">two-letter ISO code</a>)
         example: "US"
     product_id:
         type: string
