@@ -43,6 +43,7 @@ properties:
         - Credit
         - Debit
         - Prepaid
+        - Charge
         example: Credit
     card_category:
         type: string
