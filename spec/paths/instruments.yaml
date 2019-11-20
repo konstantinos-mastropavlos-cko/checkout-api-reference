@@ -11,7 +11,7 @@ post:
         schema:
           $ref: '#/components/schemas/InstrumentRequest'
   responses:
-    '200':
+    '201':
       description: Instrument created successfully
       content:
         application/json:
